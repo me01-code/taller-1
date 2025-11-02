@@ -11,12 +11,16 @@ import argparse
 
 def check_ns3_installation():
     """Check if NS-3 is properly installed"""
+    import glob
+    
     ns3_paths = [
         "/usr/local/ns-3",
         "/opt/ns-3",
         os.path.expanduser("~/ns-3"),
-        os.path.expanduser("~/ns-allinone-3.*/ns-3.*"),
     ]
+    
+    # Add paths from glob patterns
+    ns3_paths.extend(glob.glob(os.path.expanduser("~/ns-allinone-3.*/ns-3.*")))
     
     print("Checking for NS-3 installation...")
     for path in ns3_paths:
@@ -61,19 +65,26 @@ def run_simulation(ns3_path, protocol, params):
     """Run the simulation with specified parameters"""
     print(f"\nRunning MANET {protocol.upper()} simulation...")
     
-    cmd = ["./waf", "--run", f"manet-{protocol}"]
+    # Build waf command with parameters
+    run_args = f"manet-{protocol}"
     
     # Add command line parameters
+    param_parts = []
     if params.get('nWifis'):
-        cmd.extend([f"--nWifis={params['nWifis']}"])
+        param_parts.append(f"--nWifis={params['nWifis']}")
     if params.get('nSinks'):
-        cmd.extend([f"--nSinks={params['nSinks']}"])
+        param_parts.append(f"--nSinks={params['nSinks']}")
     if params.get('totalTime'):
-        cmd.extend([f"--totalTime={params['totalTime']}"])
+        param_parts.append(f"--totalTime={params['totalTime']}")
     if params.get('rate'):
-        cmd.extend([f"--rate={params['rate']}"])
+        param_parts.append(f"--rate={params['rate']}")
     if params.get('nodeSpeed'):
-        cmd.extend([f"--nodeSpeed={params['nodeSpeed']}"])
+        param_parts.append(f"--nodeSpeed={params['nodeSpeed']}")
+    
+    if param_parts:
+        run_args += " " + " ".join(param_parts)
+    
+    cmd = ["./waf", "--run", run_args]
     
     os.chdir(ns3_path)
     result = subprocess.run(cmd, capture_output=True, text=True)

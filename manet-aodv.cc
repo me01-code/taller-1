@@ -32,8 +32,7 @@ class ManetAodvSimulation
 public:
   ManetAodvSimulation ();
   void Run (int nWifis, int nSinks, double totalTime, std::string rate,
-            std::string phyMode, uint32_t nodeSpeed, uint32_t nodePause,
-            uint32_t periodicUpdateInterval);
+            std::string phyMode, uint32_t nodeSpeed, uint32_t nodePause);
 
 private:
   void CreateNodes ();
@@ -49,7 +48,6 @@ private:
   std::string m_phyMode;
   uint32_t m_nodeSpeed;
   uint32_t m_nodePause;
-  uint32_t m_periodicUpdateInterval;
   
   NodeContainer nodes;
   NetDeviceContainer devices;
@@ -163,8 +161,7 @@ ManetAodvSimulation::InstallApplications ()
 
 void
 ManetAodvSimulation::Run (int nWifis, int nSinks, double totalTime, std::string rate,
-                          std::string phyMode, uint32_t nodeSpeed, uint32_t nodePause,
-                          uint32_t periodicUpdateInterval)
+                          std::string phyMode, uint32_t nodeSpeed, uint32_t nodePause)
 {
   m_nWifis = nWifis;
   m_nSinks = nSinks;
@@ -173,7 +170,6 @@ ManetAodvSimulation::Run (int nWifis, int nSinks, double totalTime, std::string 
   m_phyMode = phyMode;
   m_nodeSpeed = nodeSpeed;
   m_nodePause = nodePause;
-  m_periodicUpdateInterval = periodicUpdateInterval;
   
   CreateNodes ();
   CreateDevices ();
@@ -219,7 +215,6 @@ main (int argc, char *argv[])
   std::string phyMode = "DsssRate11Mbps";
   uint32_t nodeSpeed = 10; // m/s
   uint32_t nodePause = 0;  // seconds
-  uint32_t periodicUpdateInterval = 15;
   
   CommandLine cmd;
   cmd.AddValue ("nWifis", "Number of wifi nodes", nWifis);
@@ -229,11 +224,10 @@ main (int argc, char *argv[])
   cmd.AddValue ("phyMode", "Wifi Phy mode", phyMode);
   cmd.AddValue ("nodeSpeed", "Node speed in RandomWaypoint model (m/s)", nodeSpeed);
   cmd.AddValue ("nodePause", "Node pause in RandomWaypoint model (s)", nodePause);
-  cmd.AddValue ("periodicUpdateInterval", "Periodic update interval (s)", periodicUpdateInterval);
   cmd.Parse (argc, argv);
   
   ManetAodvSimulation simulation;
-  simulation.Run (nWifis, nSinks, totalTime, rate, phyMode, nodeSpeed, nodePause, periodicUpdateInterval);
+  simulation.Run (nWifis, nSinks, totalTime, rate, phyMode, nodeSpeed, nodePause);
   
   return 0;
 }
