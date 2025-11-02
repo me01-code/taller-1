@@ -193,13 +193,7 @@ ManetOlsrSimulation::ConfigureMobility()
 
   mobility.SetMobilityModel("ns3::RandomWaypointMobilityModel",
                             "Speed", StringValue(ssSpeed.str()),
-                            "Pause", StringValue(ssPause.str()),
-                            "PositionAllocator", PointerValue(
-                              CreateObject<RandomRectanglePositionAllocator>(
-                                CreateObjectWithAttributes<UniformRandomVariable>(
-                                  "Min", DoubleValue(0.0), "Max", DoubleValue(1000.0)),
-                                CreateObjectWithAttributes<UniformRandomVariable>(
-                                  "Min", DoubleValue(0.0), "Max", DoubleValue(1000.0)))));
+                            "Pause", StringValue(ssPause.str()));
 
   mobility.Install(m_nodes);
 }
@@ -252,11 +246,20 @@ ManetOlsrSimulation::ConfigureTracing()
 {
   NS_LOG_INFO("Configurando trazas");
 
-  // PCAP
+  // PCAP - Enable on the devices that were already created
   if (m_enablePcap)
     {
-      YansWifiPhyHelper wifiPhy;
-      wifiPhy.EnablePcapAll("manet-olsr");
+      // Enable PCAP tracing on all devices
+      for (uint32_t i = 0; i < m_devices.GetN(); ++i)
+        {
+          std::ostringstream oss;
+          oss << "manet-olsr-" << i;
+          Ptr<WifiNetDevice> wifiDevice = DynamicCast<WifiNetDevice>(m_devices.Get(i));
+          if (wifiDevice)
+            {
+              wifiDevice->GetPhy()->EnablePcap(oss.str(), wifiDevice->GetPhy());
+            }
+        }
     }
 
   // NetAnim

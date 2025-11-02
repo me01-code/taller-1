@@ -178,25 +178,42 @@ class MANETAnalyzer:
         # Analizar delay (típicamente log-normal)
         if 'delay' in self.data.columns:
             delays = self.data['delay'].dropna()
-            delays = delays[delays > 0]  # Eliminar valores no positivos
             
-            print("\nDELAY - Ajuste Log-Normal:")
+            # Filtrar valores no positivos y reportar
+            original_count = len(delays)
+            delays = delays[delays > 0]
+            filtered_count = original_count - len(delays)
             
-            # Ajustar distribución log-normal
-            shape, loc, scale = stats.lognorm.fit(delays, floc=0)
+            if filtered_count > 0:
+                print(f"\n⚠ Advertencia: {filtered_count} valor(es) no positivo(s) filtrado(s) de 'delay'")
             
-            print(f"  Parámetros:")
-            print(f"    σ (shape): {shape:.4f}")
-            print(f"    loc: {loc:.4f}")
-            print(f"    scale: {scale:.4f}")
+            if len(delays) < 30:
+                print("\n⚠ Advertencia: Menos de 30 muestras para ajuste de distribución.")
+                print(f"  Se tienen {len(delays)} muestras. Los resultados pueden no ser confiables.")
             
-            # Test de bondad de ajuste (Kolmogorov-Smirnov)
-            ks_stat, ks_pvalue = stats.kstest(delays, 
-                                              lambda x: stats.lognorm.cdf(x, shape, loc, scale))
-            
-            print(f"  Test Kolmogorov-Smirnov:")
-            print(f"    Estadístico: {ks_stat:.4f}")
-            print(f"    p-value: {ks_pvalue:.4f}")
+            if len(delays) >= 5:  # Mínimo absoluto para intentar ajuste
+                print("\nDELAY - Ajuste Log-Normal:")
+                
+                # Ajustar distribución log-normal
+                shape, loc, scale = stats.lognorm.fit(delays, floc=0)
+                
+                print(f"  Parámetros:")
+                print(f"    σ (shape): {shape:.4f}")
+                print(f"    loc: {loc:.4f}")
+                print(f"    scale: {scale:.4f}")
+                
+                # Test de bondad de ajuste solo si hay suficientes datos
+                if len(delays) >= 30:
+                    ks_stat, ks_pvalue = stats.kstest(delays, 
+                                                      lambda x: stats.lognorm.cdf(x, shape, loc, scale))
+                    
+                    print(f"  Test Kolmogorov-Smirnov:")
+                    print(f"    Estadístico: {ks_stat:.4f}")
+                    print(f"    p-value: {ks_pvalue:.4f}")
+                else:
+                    print(f"  ⚠ Test K-S omitido (se necesitan ≥30 muestras, se tienen {len(delays)})")
+            else:
+                print(f"\n⚠ Insuficientes datos para ajuste de distribución ({len(delays)} muestras)")
             
             if ks_pvalue > 0.05:
                 print(f"    → Los datos SIGUEN la distribución log-normal")
