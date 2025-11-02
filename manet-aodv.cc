@@ -183,9 +183,6 @@ ManetAodvSimulation::Run (int nWifis, int nSinks, double totalTime, std::string 
   
   NS_LOG_INFO ("Run Simulation.");
   
-  // Enable packet capture
-  wifiPhy.EnablePcap ("manet-aodv", devices);
-  
   // Flow Monitor
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor = flowmon.InstallAll ();
