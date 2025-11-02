@@ -199,7 +199,17 @@ ManetAodvSimulation::Run (int nWifis, int nSinks, double totalTime, std::string 
       std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
       std::cout << "  Rx Packets: " << i->second.rxPackets << "\n";
       std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
-      std::cout << "  Throughput: " << i->second.rxBytes * 8.0 / (i->second.timeLastRxPacket.GetSeconds () - i->second.timeFirstTxPacket.GetSeconds ()) / 1024 / 1024 << " Mbps\n";
+      
+      // Calculate throughput with division by zero protection
+      double timeDiff = i->second.timeLastRxPacket.GetSeconds () - i->second.timeFirstTxPacket.GetSeconds ();
+      if (timeDiff > 0 && i->second.rxBytes > 0)
+        {
+          std::cout << "  Throughput: " << i->second.rxBytes * 8.0 / timeDiff / 1024 / 1024 << " Mbps\n";
+        }
+      else
+        {
+          std::cout << "  Throughput: 0 Mbps\n";
+        }
     }
   
   Simulator::Destroy ();
