@@ -1,0 +1,162 @@
+{
+  "description": "Parámetros de configuración para simulaciones MANET",
+  "version": "1.0",
+  
+  "network": {
+    "nodes": {
+      "count": 20,
+      "min": 10,
+      "max": 50,
+      "description": "Número de nodos en la red"
+    },
+    "area": {
+      "width": 1000,
+      "height": 1000,
+      "unit": "meters",
+      "description": "Área de simulación (metros)"
+    },
+    "transmission_range": {
+      "value": 250,
+      "unit": "meters",
+      "description": "Rango de transmisión de los nodos"
+    }
+  },
+  
+  "mobility": {
+    "model": "RandomWaypoint",
+    "speed": {
+      "min": 0,
+      "max": 10,
+      "unit": "m/s",
+      "description": "Velocidad de movimiento de nodos"
+    },
+    "pause": {
+      "value": 2,
+      "unit": "seconds",
+      "description": "Tiempo de pausa entre movimientos"
+    }
+  },
+  
+  "traffic": {
+    "type": "CBR",
+    "packet_size": {
+      "value": 512,
+      "unit": "bytes",
+      "description": "Tamaño de paquetes de datos"
+    },
+    "interval": {
+      "value": 0.5,
+      "unit": "seconds",
+      "description": "Intervalo entre paquetes"
+    },
+    "port": 9,
+    "description": "Configuración de tráfico CBR (Constant Bit Rate)"
+  },
+  
+  "simulation": {
+    "duration": {
+      "value": 100,
+      "unit": "seconds",
+      "description": "Duración total de la simulación"
+    },
+    "warm_up": {
+      "value": 10,
+      "unit": "seconds",
+      "description": "Tiempo de calentamiento antes de recolectar métricas"
+    },
+    "seed": {
+      "value": null,
+      "description": "Semilla aleatoria (null para aleatoria)"
+    }
+  },
+  
+  "protocols": {
+    "olsr": {
+      "hello_interval": {
+        "value": 2,
+        "unit": "seconds"
+      },
+      "tc_interval": {
+        "value": 5,
+        "unit": "seconds"
+      },
+      "topology_hold_time": {
+        "value": 15,
+        "unit": "seconds"
+      }
+    },
+    "batman": {
+      "ogm_interval": {
+        "value": 1,
+        "unit": "seconds"
+      },
+      "purge_timeout": {
+        "value": 200,
+        "unit": "seconds"
+      }
+    }
+  },
+  
+  "tracing": {
+    "pcap": {
+      "enabled": false,
+      "description": "Habilitar trazas PCAP (genera archivos grandes)"
+    },
+    "netanim": {
+      "enabled": false,
+      "output_file": "manet-animation.xml",
+      "description": "Habilitar animación con NetAnim"
+    },
+    "flow_monitor": {
+      "enabled": true,
+      "description": "Habilitar FlowMonitor para métricas"
+    }
+  },
+  
+  "scenarios": {
+    "low_mobility": {
+      "description": "Escenario de baja movilidad",
+      "speed_max": 5,
+      "pause": 30
+    },
+    "high_mobility": {
+      "description": "Escenario de alta movilidad",
+      "speed_max": 20,
+      "pause": 5
+    },
+    "high_density": {
+      "description": "Escenario de alta densidad",
+      "nodes": 50,
+      "area_width": 1000,
+      "area_height": 1000
+    },
+    "heavy_traffic": {
+      "description": "Escenario de tráfico pesado",
+      "packet_size": 1024,
+      "interval": 0.1
+    }
+  },
+  
+  "metrics": {
+    "pdr": {
+      "name": "Packet Delivery Ratio",
+      "unit": "percentage",
+      "description": "Porcentaje de paquetes entregados exitosamente"
+    },
+    "delay": {
+      "name": "End-to-End Delay",
+      "unit": "milliseconds",
+      "description": "Retardo promedio de extremo a extremo"
+    },
+    "throughput": {
+      "name": "Network Throughput",
+      "unit": "kbps",
+      "description": "Tasa de transferencia de datos"
+    },
+    "overhead": {
+      "name": "Routing Overhead",
+      "unit": "percentage",
+      "description": "Porcentaje de tráfico de control vs datos"
+    }
+  }
+}
