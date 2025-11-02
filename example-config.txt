@@ -1,0 +1,282 @@
+# NS-3 MANET Simulation Configuration Examples
+# Use these configurations with the simulation scripts
+
+# =============================================================================
+# BASIC CONFIGURATIONS
+# =============================================================================
+
+[Small Network - Testing]
+nWifis=5
+nSinks=2
+totalTime=30
+rate=1024bps
+nodeSpeed=5
+nodePause=5
+
+[Default Configuration]
+nWifis=10
+nSinks=3
+totalTime=100
+rate=2048bps
+nodeSpeed=10
+nodePause=0
+
+[Large Network]
+nWifis=25
+nSinks=8
+totalTime=200
+rate=2048bps
+nodeSpeed=10
+nodePause=2
+
+# =============================================================================
+# MOBILITY-BASED SCENARIOS
+# =============================================================================
+
+[Static Network]
+# Nodes don't move (useful for baseline testing)
+nWifis=10
+nSinks=3
+totalTime=100
+rate=2048bps
+nodeSpeed=0
+nodePause=0
+
+[Low Mobility - Pedestrian]
+# Simulates walking speed
+nWifis=15
+nSinks=4
+totalTime=150
+rate=2048bps
+nodeSpeed=3
+nodePause=15
+
+[Medium Mobility - City Traffic]
+# Simulates urban vehicular speeds
+nWifis=20
+nSinks=5
+totalTime=150
+rate=2048bps
+nodeSpeed=15
+nodePause=5
+
+[High Mobility - Highway]
+# Simulates highway speeds
+nWifis=20
+nSinks=5
+totalTime=200
+rate=2048bps
+nodeSpeed=30
+nodePause=0
+
+[Very High Mobility - UAV/Drones]
+# Simulates fast-moving aerial networks
+nWifis=15
+nSinks=3
+totalTime=150
+rate=2048bps
+nodeSpeed=40
+nodePause=0
+
+# =============================================================================
+# DENSITY-BASED SCENARIOS
+# =============================================================================
+
+[Sparse Network]
+# Few nodes, large area
+nWifis=5
+nSinks=2
+totalTime=150
+rate=1024bps
+nodeSpeed=10
+nodePause=5
+
+[Medium Density]
+# Moderate node count
+nWifis=15
+nSinks=5
+totalTime=150
+rate=2048bps
+nodeSpeed=10
+nodePause=3
+
+[Dense Network]
+# Many nodes in same area
+nWifis=30
+nSinks=10
+totalTime=200
+rate=2048bps
+nodeSpeed=10
+nodePause=2
+
+[Very Dense - Event Scenario]
+# Simulates crowded event (stadium, concert)
+nWifis=40
+nSinks=15
+totalTime=200
+rate=1024bps
+nodeSpeed=3
+nodePause=10
+
+# =============================================================================
+# TRAFFIC LOAD SCENARIOS
+# =============================================================================
+
+[Light Traffic]
+nWifis=10
+nSinks=2
+totalTime=100
+rate=512bps
+nodeSpeed=10
+nodePause=5
+
+[Moderate Traffic]
+nWifis=15
+nSinks=5
+totalTime=150
+rate=2048bps
+nodeSpeed=10
+nodePause=3
+
+[Heavy Traffic]
+nWifis=20
+nSinks=10
+totalTime=200
+rate=4096bps
+nodeSpeed=10
+nodePause=2
+
+# =============================================================================
+# PROTOCOL COMPARISON SCENARIOS
+# =============================================================================
+
+[AODV vs OLSR - Baseline]
+# Standard comparison scenario
+nWifis=10
+nSinks=3
+totalTime=100
+rate=2048bps
+nodeSpeed=10
+nodePause=0
+
+[AODV vs OLSR - High Mobility]
+# Tests reactive vs proactive under stress
+nWifis=20
+nSinks=5
+totalTime=150
+rate=2048bps
+nodeSpeed=25
+nodePause=0
+
+[AODV vs OLSR - Scalability]
+# Tests with many nodes
+nWifis=35
+nSinks=12
+totalTime=200
+rate=2048bps
+nodeSpeed=12
+nodePause=3
+
+# =============================================================================
+# APPLICATION-SPECIFIC SCENARIOS
+# =============================================================================
+
+[Emergency Response]
+# Fast deployment, high mobility
+nWifis=12
+nSinks=4
+totalTime=120
+rate=4096bps
+nodeSpeed=20
+nodePause=2
+
+[Military Tactical]
+# Medium mobility, varied pause times
+nWifis=25
+nSinks=8
+totalTime=200
+rate=2048bps
+nodeSpeed=12
+nodePause=8
+
+[IoT Sensor Network]
+# Low mobility, low data rate
+nWifis=30
+nSinks=10
+totalTime=300
+rate=256bps
+nodeSpeed=2
+nodePause=20
+
+[Vehicular Network - Urban]
+# City traffic patterns
+nWifis=20
+nSinks=6
+totalTime=180
+rate=4096bps
+nodeSpeed=15
+nodePause=8
+
+[Vehicular Network - Highway]
+# High-speed, minimal pauses
+nWifis=15
+nSinks=5
+totalTime=150
+rate=4096bps
+nodeSpeed=35
+nodePause=0
+
+# =============================================================================
+# USAGE INSTRUCTIONS
+# =============================================================================
+
+# To use these configurations:
+#
+# 1. Choose a configuration section from above
+# 2. Run the simulation with those parameters:
+#
+#    ./waf --run "manet-aodv --nWifis=10 --nSinks=3 --totalTime=100 --rate=2048bps --nodeSpeed=10 --nodePause=0"
+#
+# 3. Or use the Python runner:
+#
+#    python3 run_manet_simulation.py --nWifis 10 --nSinks 3 --totalTime 100 --rate 2048bps --nodeSpeed 10
+#
+# 4. Compare protocols by running the same configuration with both AODV and OLSR
+
+# =============================================================================
+# PARAMETER GUIDELINES
+# =============================================================================
+
+# nWifis (Number of nodes):
+#   - Small: 5-10 nodes
+#   - Medium: 10-20 nodes
+#   - Large: 20-40 nodes
+#   - Constraint: nWifis > nSinks
+
+# nSinks (Number of receivers):
+#   - Typically 20-40% of total nodes
+#   - More sinks = more simultaneous flows
+
+# totalTime (Simulation duration in seconds):
+#   - Short tests: 30-60 seconds
+#   - Standard: 100-150 seconds
+#   - Long tests: 200-300 seconds
+#   - Longer times give more stable statistics
+
+# rate (Traffic generation rate):
+#   - Low: 256-512 bps
+#   - Medium: 1024-2048 bps
+#   - High: 4096-8192 bps
+
+# nodeSpeed (Maximum speed in m/s):
+#   - Pedestrian: 1-5 m/s
+#   - Urban vehicle: 10-20 m/s
+#   - Highway vehicle: 25-40 m/s
+#   - Note: 1 m/s ≈ 3.6 km/h
+
+# nodePause (Pause time in seconds):
+#   - No pause: 0 seconds (continuous movement)
+#   - Short pause: 2-5 seconds
+#   - Medium pause: 5-10 seconds
+#   - Long pause: 10-20 seconds
+#   - Higher pause = more stable topology
